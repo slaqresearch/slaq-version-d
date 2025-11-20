@@ -1,116 +1,162 @@
-# To run the program:
-<br />
+# 🚀 SLAQ AI Speech Diagnosis — Full System Setup Guide
 
-<font color="red">
+A clean, simplified, and production-ready README for running the full system: Redis, Celery, Django, and AI model downloads.
 
-# 0⚡Initial Set Up 
-</font>
+---
 
-<font color="green">
+# ⚡ 0. Initial Setup
 
-## 📦 Models
-</font>
+## 📦 Install Python Environment
 
-This reduce the processing delay
-## (Terminal 1: `Download AI Models ~3GB`)
-better use Command Prombt
-### 1. Download AI model (first time only)
-you can check if it downloaded on `C:\Users\[YOUR-USER-NAME]\.cache\huggingface\hub`
-<br />
-Activate enviornment (optional)
-```shell
-pip install transformers torch
-```
-Then run download_model.py
-```shell
-python download_model.py
-```
-<br />
-
-<font color="red">
-
-# 1⚡System Set Up 
-</font>
-
-<font color="green">
-
-## 1) 🚚📨 Redis
-</font>
-
-## (Terminal 1: `Redis Server` )
-Ensure Redis is installed
-```shell
-# Install Chocolatey first (if not installed)
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-
-# Install Redis using Chocolatey
-choco install redis-64
-```
-### 1. Start Redis server
-
-```shell
-redis-server
-```
-
-<br />
-
-<font color="green">
-
-## 2) 🔁 Celery
-</font>
-
-AI Engine
-## (Terminal 2: Activate the Python environment and run Celery)
-### 1. Activate virtual environment
-
-```shell
+```sh
 python -m venv venv
-venv\Scripts\activate 
-```
-### 2. Install dependencies
-
-```shell
-pip install -r requirements.txt
+venv\Scripts\activate
+pip install --upgrade pip
 ```
 
-### 3. Run celery
+## 📥 Install Required Libraries
 
-```shell
-celery -A slaq_project worker --pool=solo -l info 
-```
+Before downloading models:
 
-<br />
-
-<font color="green">
-
-## 3) 🦙 Run server
-</font>
-
-### 1. Activate virtual environment
-
-```shell
-python -m venv venv
-venv\Scripts\activate 
-```
-### 2. Install dependencies
-
-```shell
-pip install -r requirements.txt
-```
-
-### 3. Uninstall some dependencies for some dependencies (gonna write this clear)
-
-```sql
-pip uninstall torch torchvision torchaudio torchcodec ffmpeg-python -y
-pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu121 
-pip install torchcodec
-```
-### 4. Run Server
-
-```sql 
-python manage.py runserver
+```sh
+pip install transformers torch torchaudio
 ```
 
 ---
-Signing off.
 
+# ⚡ 1. Download AI Models (One-time Only)
+
+This step downloads ~3GB of audio AI models.
+
+**Run this command in Terminal 1:**
+
+```sh
+python download_model.py
+```
+
+Models are stored in:
+
+```
+C:\Users\<YOUR_USERNAME>\.cache\huggingface\hub
+```
+
+---
+
+# ⚡ 2. Start System Services
+
+# 2.1 🚚 Redis Server
+
+Redis is required for Celery background task processing.
+
+## ✔ Ensure Redis is Installed
+
+Install using the official MSI installer (recommended for Windows):
+👉 [https://github.com/microsoftarchive/redis/releases](https://github.com/microsoftarchive/redis/releases)
+Download:
+
+```
+Redis-x64-3.2.100.msi
+```
+
+During installation:
+
+* ✔ Add Redis to PATH
+* ✔ Install as a Windows Service
+
+## ✔ Start Redis
+
+```sh
+redis-server
+```
+
+Or start Windows service:
+
+```sh
+net start Redis
+```
+
+---
+
+# 2.2 🔁 Celery Worker
+
+Celery executes the AI analysis jobs (audio processing, ML pipeline).
+
+## ✔ Start Celery (Terminal 2)
+
+### 1. Activate Virtual Environment
+
+```sh
+venv\Scripts\activate
+```
+
+### 2. Install Dependencies
+
+```sh
+pip install -r requirements.txt
+```
+
+### 3. Run Celery
+
+```sh
+celery -A slaq_project worker --pool=solo -l info
+```
+
+---
+
+# ⚡ 3. Start Django Server
+
+The main backend web server.
+
+## ✔ Steps (Terminal 3)
+
+### 1. Activate Environment
+
+```sh
+venv\Scripts\activate
+```
+
+### 2. Install Dependencies
+
+```sh
+pip install -r requirements.txt
+```
+
+### 3. Run Django
+
+```sh
+python manage.py runserver
+```
+
+Your app is now available at:
+
+```
+http://127.0.0.1:8000/
+```
+
+---
+
+# 📝 Notes
+
+* Always keep **Redis running** before starting Celery or Django.
+* Celery and Django must run in **separate terminals**.
+* If models aren’t found, delete HuggingFace cache and re-run the download script.
+* Keep `requirements.txt` updated.
+
+---
+
+# 🎉 System Overview
+
+| Component              | Purpose                                  |
+| ---------------------- | ---------------------------------------- |
+| **Redis**              | Message broker for Celery                |
+| **Celery Worker**      | Runs background AI analysis              |
+| **Django Server**      | Backend API and business logic           |
+| **HuggingFace Models** | Speech processing + stuttering detection |
+
+---
+
+# ❤️ Author
+
+Clean & production-ready setup guide generated with the help of AI.
+
+Ready to deploy. 🚀
