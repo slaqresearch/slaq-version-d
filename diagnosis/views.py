@@ -20,7 +20,10 @@ logger = logging.getLogger(__name__)
 @login_required
 def record_audio(request):
     """Display recording interface"""
-    return render(request, 'diagnosis/record.html')
+    context = {
+        'debug': settings.DEBUG,
+    }
+    return render(request, 'diagnosis/record.html', context)
 
 
 @login_required

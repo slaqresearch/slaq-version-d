@@ -12,10 +12,12 @@ Env.read_env(BASE_DIR / '.env')
 
 ENVIRONMENT = env('ENVIRONMENT', default='production')
 
-if ENVIRONMENT == 'development':
-    DEBUG = True
-else:
-    DEBUG = False
+DEBUG = True
+
+# if ENVIRONMENT == 'development':
+#     DEBUG = True
+# else:
+#     DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
