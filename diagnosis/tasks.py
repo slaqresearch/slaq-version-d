@@ -47,12 +47,14 @@ def process_audio_recording(self, recording_id):
         except Exception as e:
             logger.warning(f"⚠️ Could not calculate duration: {e}")
         
-        # Load AI detector and analyze audio
-        logger.info(f"🤖 Loading AI models...")
-        log_model_cache_info()  # Log cache information
+        # Load AI detector and analyze audio via external API
+        logger.info(f"🤖 Loading AI detector (external API mode)...")
+        log_model_cache_info()  # Log API mode info
         detector = get_stutter_detector()
         
-        logger.info(f"🎵 Analyzing audio with AI...")
+        logger.info(f"🎵 Analyzing audio via external ML API...")
+        logger.info(f"🎵 Audio path: {audio_path}")
+        logger.info(f"🎵 Audio file exists: {os.path.exists(audio_path)}")
         analysis_data = detector.analyze_audio(audio_path)
         
         # Save analysis results

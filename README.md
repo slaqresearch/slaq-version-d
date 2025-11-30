@@ -150,11 +150,24 @@ pip install -r requirements.txt
 
 3. Run Celery
 
+**⚠️ Windows Limitation:** The `prefork` pool doesn't work on Windows because it requires Unix `fork()` which Windows doesn't support.
+
+**For Windows:**
 ```sh
+# Development (single-threaded)
 celery -A slaq_project worker --pool=solo -l info
-# for production 
-celery -A slaq_project worker --pool=prefork --concurrency=2 -l info
+
+# Production (multi-threaded with concurrency)
+celery -A slaq_project worker --pool=threads --concurrency=4 -l info
 ```
+
+**For Linux/Unix (Production Recommended):**
+```sh
+# Production (multi-process with concurrency)
+celery -A slaq_project worker --pool=prefork --concurrency=4 -l info
+```
+
+> **💡 Production Tip:** Adjust `--concurrency` based on your CPU cores (typically 2-4x CPU cores). For heavy ML tasks, start with 2-4 workers.
 
 ---
 
