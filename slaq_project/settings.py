@@ -12,12 +12,12 @@ Env.read_env(BASE_DIR / '.env')
 
 ENVIRONMENT = env('ENVIRONMENT', default='production')
 
-DEBUG = True
-
-# if ENVIRONMENT == 'development':
-#     DEBUG = True
-# else:
-#     DEBUG = False
+# Debug mode
+# In production, DEBUG must be False for security. Use ENVIRONMENT to control this.
+if ENVIRONMENT == 'development':
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
+    # WhiteNoise app (disables Django's own static file handling in runserver)
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     # Third party
@@ -48,6 +51,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # WhiteNoise middleware must be directly after SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -106,10 +113,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Use WhiteNoise for efficient static file serving in production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (User uploads)
 MEDIA_URL = '/media/'

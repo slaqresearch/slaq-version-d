@@ -5,11 +5,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('theboss/', admin.site.urls),
-    path('', include('core.urls')),              # Auth & dashboard
-    path('diagnosis/', include('diagnosis.urls')),  # Audio & analysis
+    path('', include('core.urls')),                  # Auth & dashboard
+    path('diagnosis/', include('diagnosis.urls')),   # Audio & analysis
 ]
 
-# Serve media files in development
+# Serve media files in development (static is served by WhiteNoise)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
